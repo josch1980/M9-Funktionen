@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Money Talk – Choose your topic!</title>
+<style>
+  :root{
+    --bg1:#6a11cb;
+    --bg2:#2575fc;
+    --card:#ffffff;
+    --ink:#1f2533;
+    --muted:#5b6478;
+    --accent:#ff8a00;
+    --good:#00b894;
+    --shadow:0 10px 30px rgba(0,0,0,.18);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;
+    color:var(--ink);
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    min-height:100vh;
+    padding:32px 16px 64px;
+  }
+  header{
+    text-align:center;
+    color:#fff;
+    margin-bottom:28px;
+  }
+  header h1{
+    font-size:clamp(28px,5vw,46px);
+    text-shadow:0 3px 12px rgba(0,0,0,.25);
+  }
+  header p{
+    margin-top:10px;
+    font-size:clamp(15px,2.5vw,19px);
+    opacity:.95;
+  }
+  .badge{
+    display:inline-block;
+    margin-top:16px;
+    background:rgba(255,255,255,.18);
+    border:1px solid rgba(255,255,255,.4);
+    padding:8px 18px;
+    border-radius:999px;
+    font-weight:600;
+    backdrop-filter:blur(4px);
+  }
+
+  /* How-to box */
+  .howto{
+    max-width:1100px;
+    margin:0 auto 30px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.3);
+    border-radius:16px;
+    padding:18px 22px;
+    color:#fff;
+    backdrop-filter:blur(6px);
+  }
+  .howto h2{font-size:18px;margin-bottom:8px;}
+  .howto ol{margin-left:20px;line-height:1.7;}
+
+  /* Grid of topic cards */
+  .grid{
+    max-width:1100px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(290px,1fr));
+    gap:22px;
+  }
+  .card{
+    background:var(--card);
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    padding:24px 22px 22px;
+    position:relative;
+    cursor:pointer;
+    transition:transform .18s ease, box-shadow .18s ease;
+    border:3px solid transparent;
+    overflow:hidden;
+  }
+  .card:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(0,0,0,.28);}
+  .card.selected{
+    border-color:var(--good);
+    transform:translateY(-4px);
+  }
+  .card .num{
+    position:absolute;
+    top:-14px;
+    right:-14px;
+    width:74px;height:74px;
+    background:linear-gradient(135deg,var(--accent),#ff5e62);
+    color:#fff;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:30px;font-weight:800;
+    box-shadow:0 6px 14px rgba(0,0,0,.2);
+  }
+  .card .icon{font-size:40px;}
+  .card h3{
+    font-size:21px;
+    margin:10px 0 14px;
+    padding-right:50px;
+  }
+  .card ul{list-style:none;}
+  .card ul li{
+    padding:7px 0 7px 26px;
+    position:relative;
+    line-height:1.45;
+    color:var(--muted);
+  }
+  .card ul li::before{
+    content:"›";
+    position:absolute;left:6px;top:6px;
+    color:var(--bg2);
+    font-weight:800;
+  }
+  .tip{
+    margin-top:14px;
+    background:#fff7e6;
+    border-left:4px solid var(--accent);
+    padding:10px 12px;
+    border-radius:8px;
+    font-size:14px;
+    color:#8a5a00;
+  }
+  .tip strong{color:#b35c00;}
+
+  .choose{
+    display:block;
+    width:100%;
+    margin-top:16px;
+    padding:11px;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,var(--bg1),var(--bg2));
+    color:#fff;
+    font-size:15px;font-weight:700;
+    cursor:pointer;
+    transition:filter .15s;
+  }
+  .choose:hover{filter:brightness(1.1);}
+  .card.selected .choose{background:var(--good);}
+
+  /* Selection banner */
+  #banner{
+    position:fixed;
+    left:50%;bottom:24px;
+    transform:translateX(-50%) translateY(140%);
+    background:#fff;
+    color:var(--ink);
+    padding:16px 26px;
+    border-radius:16px;
+    box-shadow:0 12px 40px rgba(0,0,0,.35);
+    font-size:17px;font-weight:600;
+    display:flex;align-items:center;gap:14px;
+    transition:transform .35s cubic-bezier(.2,.9,.3,1.3);
+    z-index:50;
+    max-width:92%;
+  }
+  #banner.show{transform:translateX(-50%) translateY(0);}
+  #banner .big{font-size:24px;}
+  #banner button{
+    border:none;background:var(--bg2);color:#fff;
+    padding:8px 14px;border-radius:10px;cursor:pointer;font-weight:700;
+  }
+
+  footer{
+    text-align:center;color:#fff;opacity:.85;
+    margin-top:40px;font-size:14px;
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <h1>💰 Money Talk</h1>
+    <p>Choose <strong>one</strong> topic and talk about it in front of the class!</p>
+    <span class="badge">🎤 Speaking task · Money &amp; Saving</span>
+  </header>
+
+  <section class="howto">
+    <h2>📋 What to do</h2>
+    <ol>
+      <li>Read the six topics below.</li>
+      <li>Click the topic you like best — it turns <strong>green</strong>.</li>
+      <li>Use the points and the tip to prepare a short talk (about 1–2 minutes).</li>
+      <li>Speak freely — you may use a few key words, but don't read everything!</li>
+    </ol>
+  </section>
+
+  <main class="grid" id="grid">
+
+    <article class="card" data-title="Money for teens" data-icon="🧒">
+      <div class="num">1</div>
+      <div class="icon">🧒</div>
+      <h3>Money for teens</h3>
+      <ul>
+        <li>Where teens get money: pocket money, gifts, a small job</li>
+        <li>Why it is important to handle money well</li>
+      </ul>
+      <div class="tip"><strong>Tip:</strong> don't spend everything at once.</div>
+      <button class="choose">Choose this topic</button>
+    </article>
+
+    <article class="card" data-title="Needs or wants" data-icon="🤔">
+      <div class="num">2</div>
+      <div class="icon">🤔</div>
+      <h3>Needs or wants</h3>
+      <ul>
+        <li>A <em>need</em> is something you must have (food, clothes, school things)</li>
+        <li>A <em>want</em> is something nice but not necessary (games, sweets, new shoes)</li>
+        <li>Before you buy, ask: "Do I really need this?"</li>
+      </ul>
+      <div class="tip"><strong>Tip:</strong> wait before buying a <em>want</em>.</div>
+      <button class="choose">Choose this topic</button>
+    </article>
+
+    <article class="card" data-title="Saving for something big" data-icon="🏦">
+      <div class="num">3</div>
+      <div class="icon">🏦</div>
+      <h3>Saving for something big</h3>
+      <ul>
+        <li>Choose a goal (a phone, a bike, a trip)</li>
+        <li>Save a little money every week or month</li>
+        <li>It takes time, but you reach your goal</li>
+      </ul>
+      <div class="tip"><strong>Tip:</strong> put your saving money in a different place.</div>
+      <button class="choose">Choose this topic</button>
+    </article>
+
+    <article class="card" data-title="Making a budget" data-icon="📊">
+      <div class="num">4</div>
+      <div class="icon">📊</div>
+      <h3>Making a budget</h3>
+      <ul>
+        <li>Example: you get 60 € a month</li>
+        <li>Split it: 50 % needs · 30 % wants · 20 % saving</li>
+        <li>Write down what you spend</li>
+      </ul>
+      <div class="tip"><strong>Tip:</strong> check your budget every week.</div>
+      <button class="choose">Choose this topic</button>
+    </article>
+
+    <article class="card" data-title="Smart shopping" data-icon="🛒">
+      <div class="num">5</div>
+      <div class="icon">🛒</div>
+      <h3>Smart shopping</h3>
+      <ul>
+        <li>Compare prices before you buy</li>
+        <li>Wait one day before you buy something big</li>
+        <li>Don't buy something just because your friends have it</li>
+      </ul>
+      <div class="tip"><strong>Tip:</strong> look for things on sale or a bargain.</div>
+      <button class="choose">Choose this topic</button>
+    </article>
+
+    <article class="card" data-title="When your money runs out" data-icon="💸">
+      <div class="num">6</div>
+      <div class="icon">💸</div>
+      <h3>When your money runs out</h3>
+      <ul>
+        <li>Why money runs out too fast: too many small buys, no plan</li>
+        <li>Keep track of what you spend</li>
+        <li>Don't borrow money from friends — it can cause problems</li>
+      </ul>
+      <div class="tip"><strong>Tip:</strong> save a little for the end of the month.</div>
+      <button class="choose">Choose this topic</button>
+    </article>
+
+  </main>
+
+  <footer>Good luck with your talk! 🌟</footer>
+
+  <div id="banner">
+    <span class="big">✅</span>
+    <span>You chose: <strong id="banner-topic"></strong></span>
+    <button onclick="document.getElementById('banner').classList.remove('show')">OK</button>
+  </div>
+
+<script>
+  const grid = document.getElementById('grid');
+  const banner = document.getElementById('banner');
+  const bannerTopic = document.getElementById('banner-topic');
+
+  grid.addEventListener('click', (e) => {
+    const card = e.target.closest('.card');
+    if(!card) return;
+
+    // clear other selections
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+
+    // update button text
+    document.querySelectorAll('.choose').forEach(b => b.textContent = 'Choose this topic');
+    card.querySelector('.choose').textContent = '✓ Selected';
+
+    // show banner
+    bannerTopic.textContent = card.dataset.icon + '  ' + card.dataset.title;
+    banner.classList.add('show');
+
+    card.scrollIntoView({behavior:'smooth', block:'center'});
+  });
+</script>
+</body>
+</html>
